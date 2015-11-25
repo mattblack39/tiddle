@@ -10,6 +10,7 @@ module Devise
         env["devise.skip_trackable"] = true
 
         resource = mapping.to.find_for_authentication(email: email_from_headers)
+        resource = mapping.to.find_for_authentication(username: username_from_headers) unless resource
         return fail(:invalid_token) unless resource
 
         token = Tiddle::TokenIssuer.build.find_token(resource, token_from_headers)
@@ -22,7 +23,7 @@ module Devise
       end
 
       def valid?
-        email_from_headers.present? && token_from_headers.present?
+        (email_from_headers.present? || username_from_headers.present?)  && token_from_headers.present?
       end
 
       def store?
@@ -30,6 +31,10 @@ module Devise
       end
 
       private
+
+        def username_from_headers
+          env["HTTP_X_#{model_name}_USERNAME"]
+        end
 
         def email_from_headers
           env["HTTP_X_#{model_name}_EMAIL"]
