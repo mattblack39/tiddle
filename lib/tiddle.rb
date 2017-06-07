@@ -3,6 +3,7 @@ require "tiddle/model"
 require "tiddle/strategy"
 require "tiddle/rails"
 require "tiddle/token_issuer"
+require "tiddle/config"
 
 module Tiddle
   def self.create_and_return_token(resource, request)

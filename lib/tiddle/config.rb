@@ -1,13 +1,13 @@
 module Tiddle
-  module Core
+  module Config
     @@token_keys = nil
 
-    def token_keys
+    def self.token_keys
       @@token_keys
     end
 
-    def token_keys=(country)
-      @@token_keys = country
+    def self.token_keys=(keys)
+      @@token_keys = keys
     end
   end
 end
