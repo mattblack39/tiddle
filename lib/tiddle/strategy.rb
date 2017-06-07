@@ -5,12 +5,10 @@ require 'tiddle/token_issuer'
 module Devise
   module Strategies
     class TokenAuthenticatable < Authenticatable
-
       def authenticate!
         env["devise.skip_trackable"] = true
 
-        resource = mapping.to.find_for_authentication(email: email_from_headers)
-        resource = mapping.to.find_for_authentication(username: username_from_headers) unless resource
+        resource = mapping.to.find_for_authentication(authentication_keys_from_headers)
         return fail(:invalid_token) unless resource
 
         token = Tiddle::TokenIssuer.build.find_token(resource, token_from_headers)
@@ -23,7 +21,7 @@ module Devise
       end
 
       def valid?
-        (email_from_headers.present? || username_from_headers.present?)  && token_from_headers.present?
+        authentication_keys_from_headers.present? && token_from_headers.present?
       end
 
       def store?
@@ -32,25 +30,27 @@ module Devise
 
       private
 
-        def username_from_headers
-          env["HTTP_X_#{model_name}_USERNAME"]
-        end
+      def authentication_keys_from_headers
+        authentication_keys.map do |key|
+          { key => env["HTTP_X_#{model_name}_#{key.upcase}"] }
+        end.reduce(:merge)
+      end
 
-        def email_from_headers
-          env["HTTP_X_#{model_name}_EMAIL"]
-        end
+      def token_from_headers
+        env["HTTP_X_#{model_name}_TOKEN"]
+      end
 
-        def token_from_headers
-          env["HTTP_X_#{model_name}_TOKEN"]
-        end
+      def model_name
+        Tiddle::ModelName.new.with_underscores(mapping.to)
+      end
 
-        def model_name
-          Tiddle::ModelName.new.with_underscores(mapping.to)
-        end
+      def authentication_keys
+        mapping.to.authentication_keys
+      end
 
-        def touch_token(token)
-          token.update_attribute(:last_used_at, DateTime.current) if token.last_used_at < 1.hour.ago
-        end
+      def touch_token(token)
+        token.update_attribute(:last_used_at, DateTime.current) if token.last_used_at < 1.hour.ago
+      end
     end
   end
 end

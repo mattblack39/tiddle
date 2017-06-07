@@ -1,4 +1,5 @@
 AllCops:
+  TargetRubyVersion: 2.3
   Include:
     - 'lib'
     - 'spec'
@@ -7,17 +8,11 @@ AllCops:
     - 'spec/spec_helper.rb'
 Style/StringLiterals:
   Enabled: false
-Style/EmptyLinesAroundBlockBody:
-  Enabled: false
-Style/BracesAroundHashParameters:
-  EnforcedStyle: context_dependent
 Style/Documentation:
   Enabled: false
-Style/EmptyLinesAroundClassBody:
+Style/FrozenStringLiteralComment:
   Enabled: false
-Style/IndentationConsistency:
+Style/SignalException:
   Enabled: false
-Style/EmptyLinesAroundModuleBody:
-  Enabled: false
-Style/MultilineOperationIndentation:
-  EnforcedStyle: indented
+Metrics/LineLength:
+  Max: 100

@@ -3,10 +3,15 @@
 [![Build Status](https://travis-ci.org/adamniedzielski/tiddle.svg?branch=master)](https://travis-ci.org/adamniedzielski/tiddle)
 [![Coverage Status](https://coveralls.io/repos/adamniedzielski/tiddle/badge.svg?branch=master)](https://coveralls.io/r/adamniedzielski/tiddle?branch=master)
 [![Code Climate](https://codeclimate.com/github/adamniedzielski/tiddle/badges/gpa.svg)](https://codeclimate.com/github/adamniedzielski/tiddle)
+[![Get help on Codementor](https://cdn.codementor.io/badges/get_help_github.svg)](https://www.codementor.io/adamsunday?utm_source=github&utm_medium=button&utm_term=adamsunday&utm_campaign=github)
 
 Tiddle provides Devise strategy for token authentication in API-only Ruby on Rails applications. Its main feature is **support for multiple tokens per user**.
 
 Tiddle is lightweight and non-configurable. It does what it has to do and leaves some manual implementation to you.
+
+## Versions
+
+Versions 0.7.x+ are meant to support Rails 5.0, but they require Devise 4. If you want to use Devise 3 with Rails 4.2 then take a look at the ```0.6.x``` branch.
 
 ## Installation
 
@@ -96,3 +101,14 @@ config.middleware.delete ActionDispatch::Session::CookieStore
 ```
 
 More: http://adamniedzielski.github.io/blog/2015/04/04/token-authentication-with-tiddle/#rails-session
+
+## Using field other than email
+
+Change ```config.authentication_keys``` in Devise intitializer and Tiddle will use this value.
+
+
+## Security
+
+Usually it makes sense to remove user's tokens after a password change. Depending on the project and on your taste, this can be done using various methods like running `user.authentication_tokens.destroy_all` after the password change or with an `after_save` callback in your model which runs `authentication_tokens.destroy_all if encrypted_password_changed?`.
+
+In case of a security breach, remove all existing tokens.
