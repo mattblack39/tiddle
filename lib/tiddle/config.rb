@@ -1,0 +1,3 @@
+module Tiddle
+  CONFIG = {}
+end

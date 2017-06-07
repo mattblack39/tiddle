@@ -31,7 +31,8 @@ module Devise
       private
 
       def authentication_keys_from_headers
-        authentication_keys.map do |key|
+        token_keys = Tiddle::CONFIG[:token_keys] || authentication_keys
+        token_keys.map do |key|
           { key => env["HTTP_X_#{model_name}_#{key.upcase}"] }
         end.reduce(:merge)
       end
