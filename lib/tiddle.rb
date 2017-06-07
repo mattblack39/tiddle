@@ -5,7 +5,10 @@ require "tiddle/rails"
 require "tiddle/token_issuer"
 
 module Tiddle
-  #this is a test
+  def self.this_is_a_test
+    "foo"
+  end
+
   def self.create_and_return_token(resource, request)
     TokenIssuer.build.create_and_return_token(resource, request)
   end
