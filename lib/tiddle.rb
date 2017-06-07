@@ -6,10 +6,6 @@ require "tiddle/token_issuer"
 require "tiddle/config"
 
 module Tiddle
-  def self.this_is_a_test
-    "foo"
-  end
-
   def self.create_and_return_token(resource, request)
     TokenIssuer.build.create_and_return_token(resource, request)
   end
